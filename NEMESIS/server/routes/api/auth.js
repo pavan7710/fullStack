@@ -4,6 +4,22 @@ const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const User = require('../../models/User')
 const { check, validationResult } = require("express-validator")
+const auth = require('../../middleware/auth')
+const { getUser, getUserById, updateUser } = require("../../controllers/user")
+
+
+router.param("userId" , getUserById)
+router.get("/user/:userId" ,auth ,  getUser)
+router.put('/user/:userId', updateUser)
+router.get('/', auth ,  async(req , res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password')
+        res.json(user)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send("server error")
+    }
+})
 
 
 router.post('/signin' , [
