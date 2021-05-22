@@ -15,6 +15,7 @@ app.use(express())
 app.use(cors())
 app.use(express.json())
 
+// post title and description 
 
 app.post('/' , async (req ,res)=> {
 
@@ -35,7 +36,7 @@ app.post('/' , async (req ,res)=> {
    res.send('Data added Successfully')
 })
 
-
+// get all user 
 
 app.get('/all' , async (req , res) => {
    try {
@@ -45,6 +46,28 @@ app.get('/all' , async (req , res) => {
        console.log(error)
        res.status(500).send(error.errors)
    }
+})
+
+// get single user 
+
+app.get('/all/:id' , async (req , res) => {
+    try {
+        const singleUser = await Post.findById(req.params.id)
+        return res.json(singleUser)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error.errors)
+    }
+})
+
+app.delete('/delete/:id' , async (req , res )=> {
+    try{
+        await Post.findByIdAndDelete(req.params.id)
+        return res.json("User Deleted")
+    } catch (error) {
+        console.log(error)
+        res.status(500).send(error.errors)
+    }
 })
 
 
