@@ -59,7 +59,7 @@ app.get('/all/:id' , async (req , res) => {
         res.status(500).send(error.errors)
     }
 })
-
+// delete Route 
 app.delete('/delete/:id' , async (req , res )=> {
     try{
         await Post.findByIdAndDelete(req.params.id)
@@ -70,6 +70,19 @@ app.delete('/delete/:id' , async (req , res )=> {
     }
 })
 
+// update Route 
+
+app.post('/update/:id' , (req , res) => {
+    Post.findById(req.params.id)
+    .then(data => {
+        data.title = req.body.title,
+        data.description = req.body.description
+        data.save()
+        .then(()=> res.json("Exercise Updated"))
+        .catch(err => res.status(400).json(err))
+    })
+    .catch(err => res.status(400).json(err))
+})
 
 app.listen(port , err => {
     if (err) throw err 
